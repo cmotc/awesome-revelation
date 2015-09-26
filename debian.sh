@@ -3,7 +3,7 @@
 SOURCEBINPATH=.
 SOURCEBIN=init.lua
 SOURCEDOC=README.md
-DEBFOLDER=awesome-revelation
+DEBFOLDER=awesome-calladuran
 
 DEBVERSION=$(date +%Y%m%d)
 
@@ -28,8 +28,8 @@ pwd
 dh_make -s --indep --createorig
 
 mkdir -p debian/tmp/usr/share/doc/$DEBFOLDER/
-mkdir -p debian/tmp/etc/xdg/revelation
-cp init.lua debian/tmp/etc/xdg/revelation
+mkdir -p debian/tmp/etc/xdg/calladuran
+cp init.lua debian/tmp/etc/xdg/calladuran
 cp README.md debian/tmp/usr/share/doc/$DEBFOLDER/
 
 # Remove make calls
@@ -38,7 +38,7 @@ mv debian/rules.new debian/rules
 
 # debian/install must contain the list of scripts to install 
 # as well as the target directory
-echo $SOURCEBIN etc/xdg/awesome/revelation > debian/install 
+echo $SOURCEBIN etc/xdg/awesome/calladuran > debian/install 
 echo $SOURCEDOC usr/share/doc/$DEBFOLDER >> debian/install
 
 echo "Source: $DEBFOLDER
@@ -48,8 +48,8 @@ Maintainer: cmotc <cmotc@openmailbox.org>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
 Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git@github.com:cmotc/awesome-revelation
-#Vcs-Browser: https://www.github.com/cmotc/awesome-revelation
+#Vcs-Git: git@github.com:cmotc/awesome-revelation -b calladuran
+#Vcs-Browser: https://www.github.com/cmotc/awesome-revelation/tree/calladuran
 
 Package: $DEBFOLDER
 Architecture: all
@@ -63,4 +63,4 @@ rm debian/*.EX
 
 # Build the package.
 # You  will get a lot of warnings and ../somescripts_0.1-1_i386.deb
-debuild -us -uc > ../log 
+debuild -us -uc >> ../log 
