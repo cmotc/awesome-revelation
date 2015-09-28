@@ -1,7 +1,10 @@
--- revelation .lua
+-- calladuran .lua
 --
--- Library that implements Expose like behavior.
+-- Library that implements Gnome3 Overview like behavior.
 --
+-- @author cmotc cmotc@openmailbox.org
+--
+-- forked from revelation .lua
 -- @author Perry Hargrave resixian@gmail.com
 -- @author Espen Wiborg espenhw@grumblesmurf.org
 -- @author Julien Danjou julien@danjou.info
@@ -37,7 +40,7 @@ local clientData = {} -- table that holds the positions and sizes of floating cl
 local charorder = "jkluiopyhnmfdsatgvcewqzx1234567890"
 local hintbox = {} -- Table of letter wiboxes with characters as the keys
 
-local revelation = {
+local calladuran = {
     -- Name of expose tag.
     tag_name = "Revelation",
 
@@ -89,7 +92,7 @@ end
 -- @param clients A table of clients to check.
 -- @param t The tag to give matching clients.
 local function match_clients(rule, clients, t, is_excluded)
-    local mfc = rule.any and revelation.match.any or revelation.match.exact
+    local mfc = rule.any and calladuran.match.any or calladuran.match.exact
     local mf = is_excluded and function(c,_rule) return not mfc(c,_rule) end or mfc
     local flt
     for _, c in pairs(clients) do
@@ -106,7 +109,7 @@ local function match_clients(rule, clients, t, is_excluded)
 
             end
 
-            for k,v in pairs(revelation.property_to_watch) do
+            for k,v in pairs(calladuran.property_to_watch) do
                 clientData[c][k] = c[k]
                 c[k] = v
 
@@ -123,24 +126,24 @@ end
 -- @param rule A table with key and value to match. [{class=""}]
 
 
-function revelation.expose(args)
+function calladuran.expose(args)
     args = args or {}
     local rule = args.rule or {}
     local is_excluded = args.is_excluded or false
     local curr_tag_only = args.curr_tag_only or false
 
-    revelation.is_excluded = is_excluded
-    revelation.curr_tag_only = curr_tag_only
+    calladuran.is_excluded = is_excluded
+    calladuran.curr_tag_only = curr_tag_only
 
     local t={}
     local zt={}
 
 
     for scr=1,capi.screen.count() do
-        t[scr] = awful.tag.new({revelation.tag_name},
+        t[scr] = awful.tag.new({calladuran.tag_name},
         scr,
         awful.layout.suit.fair)[1]
-        zt[scr] = awful.tag.new({revelation.tag_name.."_zoom"},
+        zt[scr] = awful.tag.new({calladuran.tag_name.."_zoom"},
         scr,
         awful.layout.suit.fair)[1]
 
@@ -155,16 +158,16 @@ function revelation.expose(args)
     end
 
     if type(delayed_call) == 'function' then
-        delayed_call(function () revelation.expose_callback(t, zt) end )
+        delayed_call(function () calladuran.expose_callback(t, zt) end )
     else
-        revelation.expose_callback(t, zt)
+        calladuran.expose_callback(t, zt)
         -- No need for awesome WM 3.5.6
         --capi.awesome.emit_signal("refresh")
     end
 end
 
 
-function revelation.expose_callback(t, zt)
+function calladuran.expose_callback(t, zt)
     local hintindex = {} -- Table of visible clients with the hint letter as the keys
     local clientlist = awful.client.visible()
     for i,thisclient in pairs(clientlist) do
@@ -174,8 +177,8 @@ function revelation.expose_callback(t, zt)
             hintindex[char] = thisclient
             local geom = thisclient:geometry()
             hintbox[char].visible = true
-            hintbox[char].x = math.floor(geom.x + geom.width/2 - revelation.hintsize/2)
-            hintbox[char].y = math.floor(geom.y + geom.height/2 - revelation.hintsize/2)
+            hintbox[char].x = math.floor(geom.x + geom.width/2 - calladuran.hintsize/2)
+            hintbox[char].y = math.floor(geom.y + geom.height/2 - calladuran.hintsize/2)
             hintbox[char].screen = thisclient.screen
         end
     end
@@ -194,7 +197,7 @@ function revelation.expose_callback(t, zt)
 
         local clients
         for scr=1, capi.screen.count() do
-            if revelation.curr_tag_only then
+            if calladuran.curr_tag_only then
                 clients = awful.client.visible(scr)
             else
                 clients = capi.client.get(scr)
@@ -326,15 +329,15 @@ end
 
 -- Create the wiboxes, but don't show them
 
-function revelation.init(args)
+function calladuran.init(args)
     local letterbox = {}
 
     args = args or {}
 
-    revelation.tag_name = args.tag_name or revelation.tag_name
+    calladuran.tag_name = args.tag_name or calladuran.tag_name
     if args.match then
-        revelation.match.exact = args.match.exact or revelation.match.exact
-        revelation.match.any = args.match.any or revelation.match.any
+        calladuran.match.exact = args.match.exact or calladuran.match.exact
+        calladuran.match.any = args.match.any or calladuran.match.any
     end
 
 
@@ -342,15 +345,15 @@ function revelation.init(args)
         local char = charorder:sub(i,i)
         hintbox[char] = wibox({fg=beautiful.fg_normal, bg=beautiful.bg_focus, border_color=beautiful.border_focus, border_width=beautiful.border_width})
         hintbox[char].ontop = true
-        hintbox[char].width = revelation.hintsize
-        hintbox[char].height = revelation.hintsize
+        hintbox[char].width = calladuran.hintsize
+        hintbox[char].height = calladuran.hintsize
         letterbox[char] = wibox.widget.textbox()
         letterbox[char]:set_markup(
-          "<span color=\"" .. revelation.fg .. "\"" .. ">" ..
+          "<span color=\"" .. calladuran.fg .. "\"" .. ">" ..
             char.upper(char) ..
           "</span>"
         )
-        letterbox[char]:set_font(revelation.font)
+        letterbox[char]:set_font(calladuran.font)
         letterbox[char]:set_align("center")
         hintbox[char]:set_widget(letterbox[char])
     end
@@ -366,6 +369,6 @@ local function debuginfo( message )
 
     nid = naughty.notify({ text = tostring(mm), timeout = 10 })
 end
-setmetatable(revelation, { __call = function(_, ...) return revelation.expose(...) end })
+setmetatable(calladuran, { __call = function(_, ...) return calladuran.expose(...) end })
 
-return revelation
+return calladuran

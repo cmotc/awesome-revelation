@@ -3,11 +3,12 @@
 SOURCEBINPATH=.
 SOURCEBIN=init.lua
 SOURCEDOC=README.md
+SRCFOLDER=awesome-revelation
 DEBFOLDER=awesome-calladuran
 
 DEBVERSION=$(date +%Y%m%d)
 
-cd $DEBFOLDER
+cd $SRCFOLDER
 
 git pull origin master
 
@@ -39,6 +40,7 @@ mv debian/rules.new debian/rules
 # debian/install must contain the list of scripts to install 
 # as well as the target directory
 echo $SOURCEBIN etc/xdg/awesome/calladuran > debian/install 
+echo $SOURCEBIN etc/xdg/svirfneblin/calladuran >> debian/install 
 echo $SOURCEDOC usr/share/doc/$DEBFOLDER >> debian/install
 
 echo "Source: $DEBFOLDER
