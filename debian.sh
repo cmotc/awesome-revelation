@@ -30,7 +30,7 @@ cd $DEBFOLDERNAME
 pwd
 
 # Create the packaging skeleton (debian/*)
-dh_make -s --indep --createorig
+dh_make --indep --createorig
 
 mkdir -p debian/tmp/usr/share/doc/$DEBFOLDER/
 mkdir -p debian/tmp/etc/xdg/revelation
